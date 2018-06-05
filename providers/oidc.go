@@ -22,10 +22,15 @@ func NewOIDCProvider(p *ProviderData) *OIDCProvider {
 }
 
 func (p *OIDCProvider) Redeem(redirectURL, code string) (s *SessionState, err error) {
+	var scopes []string
+
+	scopes = append(scopes, "openid", "profile", "email", "offline_access", "groups")
+
 	ctx := context.Background()
 	c := oauth2.Config{
 		ClientID:     p.ClientID,
 		ClientSecret: p.ClientSecret,
+		Scopes:       scopes,
 		Endpoint: oauth2.Endpoint{
 			TokenURL: p.RedeemURL.String(),
 		},
